@@ -1,5 +1,5 @@
 # TUI-Tasker
-A todo list written in GO to learn the syntax and gain faimilarity with the lang. 
+A saiit written in GO to learn the syntax and gain faimilarity with the lang. 
 
 
 Potential Future Features: 
