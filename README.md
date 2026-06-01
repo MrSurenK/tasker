@@ -1,2 +1,8 @@
 # TUI-Tasker
-A todo list written in GO with interactive TUI that can run on any machine
+A todo list written in GO to learn the syntax and gain faimilarity with the lang. 
+
+
+Potential Future Features: 
+
+1. TUI interface
+2. Lightweight db
