@@ -1,4 +1,4 @@
-# TUI-Tasker
+# Go-Tasker
 A daily to do list written in GO to learn the syntax and gain faimilarity with the lang. 
 
 How it works: 
