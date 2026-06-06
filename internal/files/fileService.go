@@ -19,7 +19,13 @@ type FileService struct {
 	filename string
 }
 
-//ToDo: Error handling in file check and method to search for existing task file with curr date prefix and method to create a new task file
+//constructor to populate FileService struct
+func NewFileService(root string) *FileService{
+	return &FileService{
+		root: root,
+	}
+}
+
 
 //Function to start a fresh new todo list 
 	/*
