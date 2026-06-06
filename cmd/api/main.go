@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"path"
-
 	"github.com/MrSurenK/tasker/internal/files"
 )
 

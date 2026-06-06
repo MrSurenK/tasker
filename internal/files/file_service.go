@@ -35,10 +35,9 @@ func NewFileService(root string) *FileService{
 	/*
 	Helper function to generate a dynamic todo list file name for the day
 	*/
-func generateFileName() string{
+func generateFileName(now time.Time) string{
 	//File name generated should follow the following pattern 
 	// ToDoList-DateStamp
-	now := time.Now()
 	date := now.Format("2006-01-02")
 	fileName := "ToDoList-" + date
 	return fileName
@@ -49,7 +48,9 @@ Method to get today's todo list or create a new one all in one simple clean meth
 Caller has the reponsibility to give the root path to save todo list
 */
 func (f *FileService) GetOrCreateFile()(*os.File, error){
-	f.filename = generateFileName() + ".md" //get today's file name 
+	//today date 
+	date := time.Now()
+	f.filename = generateFileName(date) + ".md" //get today's file name 
 	path := filepath.Join(f.root,f.filename) //creates OS specific paths
 
 	//if path does not exists then createa the path too
