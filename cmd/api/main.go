@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path"
+
 	"github.com/MrSurenK/tasker/internal/files"
 )
 
@@ -23,9 +24,9 @@ func main() {
 
 	file, err := fileservice.GetOrCreateFile()
 
-	if err != nil{
-		fmt.Errorf("Encountered error: %w\n", err)
+	if err != nil {
+		log.Fatalf("Encountered error: %v", err)
 	}
 
-	fmt.Printf(file.Name())
+	fmt.Println(file.Name())
 }
