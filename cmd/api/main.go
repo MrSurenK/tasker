@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	crud.Test()
+	crud.Create("string")
 }
