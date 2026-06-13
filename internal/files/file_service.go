@@ -67,9 +67,9 @@ func (f *FileService) GetOrCreateFile()(*os.File, error){
 	}
 
 	if exists {
-		log.Printf("Using existing todo file: %s" , f.filename)
+		log.Printf("Using existing todo file: %s  \r\n" , f.filename)
 	}else{
-		log.Printf("Creating new todoFile in this path: %s", path)
+		log.Printf("Creating new todoFile in this path: %s \r\n", path)
 	}
 
 
@@ -86,7 +86,7 @@ func (f *FileService) GetOrCreateFile()(*os.File, error){
 		return nil , err
 	}
 
-	log.Printf("Retrieved todo file successfully @ %s", path)
+	log.Printf("Retrieved todo file successfully @ %s \r\n", path)
 	return file, nil 
 }
 
