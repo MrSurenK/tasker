@@ -74,13 +74,49 @@ func readKeyBoardInput() ([]byte, bool) {
 }
 
 /*
-Function to get user instruction on what to do next? 
+Function to get user instruction on what to do next. Output wil be an int that will call the different api accordingly
 1. Create a new item on list 
 2. Edit an existing item on list
 3. Delete an existing item on list
 4. Show current items on list
+
+if false returned then in main application just return and exit appliation
 */
-// func tellMeWhatToDo()
+func TellMeWhatToDo() (byte, bool){
+
+	//Print msg in terminal to request for user input
+	for{
+		os.Stdout.Write([]byte("\r\n What would you like to do?\r\n1.Add a task\r\n2.Edit task\r\n3.Delete a task\r\n4.Show current items on list\r\n5.Exit application\r\n"))
+	
+		key,read :=readKeyBoardInput()
+			if !read {
+				continue
+			}
+		//Handle edge cases: like invalid inputs and return user input for future flexibility of logging 
+		switch key[0]{
+		case '5':
+			os.Stdout.Write([]byte("\r\nExiting...\r\n"))
+			return '5',false			
+		case 3: // Ctrl+C
+			os.Stdout.Write([]byte("\r\nInterrupted.Closing Program!\r\n"))
+			return 3, false
+		case 4: // Ctrl+D
+			os.Stdout.Write([]byte("\r\nEOF. Exiting.\r\n"))
+			return 4, false
+		}	
+		return key[0], true
+	}	
+
+}
+
+/*
+Function to call the various crud operations to perform on the todo list file
+Input: take todo list file
+*/
+func executeCommand(){
+
+}
+
 
 
 
