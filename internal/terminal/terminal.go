@@ -33,14 +33,10 @@ func StartToDo() bool{
 	for{
 		os.Stdout.Write([]byte("\r\nShall we get productive today?...(y/n)\r\n"))
 
-		//read user response
-		key := make([]byte, 8)
-		if _, err := os.Stdin.Read(key); err != nil {
-			//hand error
-			os.Stdout.Write([]byte("\r\n Could not read input. Please try again"))
+		key,read :=readKeyBoardInput()
+		if !read {
 			continue
 		}
-
 		//if user says no then exit program and log 
 		switch key[0] {
 			case 'y', 'Y':
@@ -63,6 +59,28 @@ func StartToDo() bool{
 		}
 	}
 }
+
+
+
+func readKeyBoardInput() ([]byte, bool) {
+		//read user response
+		key := make([]byte, 8)
+		if _, err := os.Stdin.Read(key); err != nil {
+			//handle error
+			os.Stdout.Write([]byte("\r\n Could not read input. Please try again"))
+			return nil, false
+		}
+		return key, true
+}
+
+/*
+Function to get user instruction on what to do next? 
+1. Create a new item on list 
+2. Edit an existing item on list
+3. Delete an existing item on list
+4. Show current items on list
+*/
+// func tellMeWhatToDo()
 
 
 
