@@ -1,6 +1,7 @@
 package files
 
 import (
+	"log"
 	"os"
 	"path/filepath"
 	"time"
@@ -48,10 +49,29 @@ Method to get today's todo list or create a new one all in one simple clean meth
 Caller has the reponsibility to give the root path to save todo list
 */
 func (f *FileService) GetOrCreateFile()(*os.File, error){
+	//Create file
 	//today date 
 	date := time.Now()
 	f.filename = generateFileName(date) + ".md" //get today's file name 
 	path := filepath.Join(f.root,f.filename) //creates OS specific paths
+
+	//Check for existance and log it
+	exists:= true
+
+	if _, err := os.Stat(path); err != nil {
+		if(os.IsNotExist(err)){
+			exists = false
+		} else {
+			return nil, err
+		}
+	}
+
+	if exists {
+		log.Printf("Using existing todo file: %s" , f.filename)
+	}else{
+		log.Printf("Creating new todoFile in this path: %s", path)
+	}
+
 
 	//if path does not exists then createa the path too
 	err := os.MkdirAll(f.root, 0755)
@@ -66,6 +86,7 @@ func (f *FileService) GetOrCreateFile()(*os.File, error){
 		return nil , err
 	}
 
+	log.Printf("Retrieved todo file successfully @ %s", path)
 	return file, nil 
 }
 
