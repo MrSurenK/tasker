@@ -118,6 +118,12 @@ func executeCommand(){
 }
 
 
+//Function to write tasks to markdown file
+func SaveTask(){
+	
+}
+
+
 
 
 

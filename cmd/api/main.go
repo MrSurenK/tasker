@@ -1,13 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path"
-
 	"github.com/MrSurenK/tasker/internal/files"
 	"github.com/MrSurenK/tasker/internal/terminal"
+	"github.com/MrSurenK/tasker/task"
 )
 
 
@@ -42,19 +41,25 @@ func main() {
 	//Initialize file path into file serivice struct
 	fileservice := files.NewFileService(requiredPath)
 
-	file, err := fileservice.GetOrCreateFile()
+	//todo: defer and close file operation
+	file, err := fileservice.GetOrCreateFile() 
 
 	if err != nil {
 		log.Fatalf("Encountered error: %v", err)
 	}
 
-	fmt.Println(file.Name())
 
 	/*
 	
 	---- Perform crud operations on todolist---
-
-	
 	*/
+
+	//User adds a task
+	//grab file
+	
+
+
+
+
 
 }
