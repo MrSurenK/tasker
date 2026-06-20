@@ -1,10 +1,14 @@
 package task
 
 import (
+	"errors"
+	"fmt"
 	"io"
 	"os"
 	"strings"
-	"errors"
+
+	"github.com/MrSurenK/tasker/internal/terminal"
+	"github.com/MrSurenK/tasker/task"
 )
 
 //Sentinel error in Go
@@ -24,6 +28,41 @@ func (tasks TaskStore) AddTask(task string){
 	tasks[lastIdx + 1] = &newTask
 }
 
+
+/*
+----- Edit task option ---------
+Functional options pattern to pass optional edit parameters that can be modified 
+*/
+
+type EditOption func(*Task)
+
+
+func WithText(text string) EditOption{
+	return func (t *Task)  {
+		t.Text = text
+	}
+}
+
+func withCompletionStatus(done bool) EditOption {
+	return func (t *Task){
+		t.Done = done
+	}
+}
+
+func (tasks TaskStore)  EditTask(id int, opts ...EditOption)(*Task){
+	task, err := tasks.getTask(id)
+
+	if errors.Is(err, ErrTaskNotFound){
+		fmt.Print(err)
+	}
+
+	for _, opt := range opts{
+		opt(task) //each option mutates task in place
+	}
+
+	return task
+}
+
 // helper method to get the task and return error if no task found with that id
 func (tasks TaskStore) getTask(number int)(*Task, error){
 	task, ok := tasks[number]
@@ -34,6 +73,8 @@ func (tasks TaskStore) getTask(number int)(*Task, error){
 	return task, nil
 }
 
+
+// ------- End of Edit Task Service ----------- //
 
 
 
