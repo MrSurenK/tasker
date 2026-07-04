@@ -6,7 +6,6 @@ import (
 	"path"
 	"github.com/MrSurenK/tasker/internal/files"
 	"github.com/MrSurenK/tasker/internal/terminal"
-	"github.com/MrSurenK/tasker/task"
 )
 
 

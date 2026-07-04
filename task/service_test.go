@@ -67,3 +67,15 @@ func TestGetTask(t *testing.T){
 	}
 }
 
+
+func TestUpdateTask(t *testing.T){
+	
+}
+
+func TestDeleteTask(t *testing.T){
+
+}
+
+func TestUpdateFile(t *testing.T){
+
+}
