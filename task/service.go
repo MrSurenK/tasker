@@ -93,6 +93,13 @@ func GetSavedTasks(file *os.File) ([]string, error) {
 }
 
 
+
+//TODO: Map tasks from markdown file to task store map
+func mapMdToStore()(taskData TaskStore){
+	
+}
+
+
 func getLastId(store TaskStore) int{
 	max := 0
 	for id := range store{
@@ -103,7 +110,6 @@ func getLastId(store TaskStore) int{
 	return max
 }
 
-// TODO: Pull out the markdown processing logic to its own method 
 
 //map tasks from map to md file (unordered)
 //When method is called it will map the items to markdown file and 
@@ -131,14 +137,8 @@ func (tasks TaskStore) UpdateDoc(file *os.File)error{
 	*/
 	for _, currTask := range tasks {
 		//check and format string
-		taskToWrite := ""
+		taskToWrite := currTask.prepareTask()
 
-		if(currTask.Done){
-			taskToWrite = "-[x] " + currTask.Text //prepend markdown checkbox with check
-		} else {
-			taskToWrite = "-[ ] " + currTask.Text //prepend markdown checkbox without check
-		}
-		
 		//Write each task on a new line
 		if _, err := writer.WriteString(taskToWrite + "\n"); err != nil {
 			return err
@@ -152,4 +152,12 @@ func (tasks TaskStore) UpdateDoc(file *os.File)error{
 
 	fmt.Print("Markdown file successfully updated!")
 	return nil
+}
+
+//Method to prepare task data to be written onto markdown
+func (task Task) prepareTask() (string){
+	if task.Done {
+		return "-[x] " + task.Text
+	}
+	return "-[ ] " + task.Text
 }
