@@ -82,9 +82,14 @@ func (store TaskStore) getAllTasks()(TaskStore){
 }
 
 
-//FIXME: When getting task and placing into Task object strip away the markdown formatting properly
+
 //Get tasks from md file (Need to parse it first)
-func GetSavedTasks(file *os.File) ([]string, error) {
+func getSavedTasks(file *os.File) ([]string, error) {
+	//Reset pointer in markdown file to the first line to ensure all tasks are picked up
+	_, err := file.Seek(0,0) //rewind to start
+	if err != nil {
+		return nil, err
+	}
 	content, err := io.ReadAll(file)
 	if err != nil {
 		return nil, err
@@ -92,11 +97,45 @@ func GetSavedTasks(file *os.File) ([]string, error) {
 	return strings.Split(strings.TrimSpace(string(content)),"\n"),nil
 }
 
+//Function to check the status of the tasks written in the markdown file
+func checkStatusInFile(line string) (bool){
+	prefix := "-[x] "
+	//Check if 3rd character of the line contains 'x'
+	if (strings.HasPrefix(line, prefix)){
+		return true
+	}else{
+		return false
+	}
+}
 
+//Helper method to strip the checkboxes from string
+func stripCheckboxes(line string)(string){
+	task := line[5:]
+	return task
+}
 
-//TODO: Map tasks from markdown file to task store map
-func mapMdToStore()(taskData TaskStore){
-	
+//function to map markdown tasks to TaskStore map and Task struct
+func  MapMdToStore(file *os.File)(TaskStore,error){
+	 tasks,err:= getSavedTasks(file)
+	 if err != nil {
+		return nil, err
+	 }
+
+	 //Create a new taskstore instance
+	 store := make(TaskStore)
+
+	 for i,task := range tasks {
+		done := checkStatusInFile(task)
+		cleaned_task := stripCheckboxes(task)
+
+		store[i+1] = &Task{
+			ID: i + 1, 
+			Text: cleaned_task,
+			Done: done,
+		}
+		
+	 }
+	 return store, nil
 }
 
 
