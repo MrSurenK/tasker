@@ -49,6 +49,7 @@ func (tasks TaskStore)EditTask(id int, opts ...EditOption)(*Task){
 
 	if errors.Is(err, ErrTaskNotFound){
 		fmt.Print(err)
+		return nil
 	}
 
 	for _, opt := range opts{
@@ -99,7 +100,7 @@ func getSavedTasks(file *os.File) ([]string, error) {
 
 //Function to check the status of the tasks written in the markdown file
 func checkStatusInFile(line string) (bool){
-	prefix := "-[x] "
+	prefix := "- [x] "
 	//Check if 3rd character of the line contains 'x'
 	if (strings.HasPrefix(line, prefix)){
 		return true
@@ -110,19 +111,17 @@ func checkStatusInFile(line string) (bool){
 
 //Helper method to strip the checkboxes from string
 func stripCheckboxes(line string)(string){
-	task := line[5:]
+	task := line[6:]
 	return task
 }
 
 //function to map markdown tasks to TaskStore map and Task struct
-func  MapMdToStore(file *os.File)(TaskStore,error){
+//When calling this function remember to delete any other existing instance of TaskStore present to prevent bugs and inconsistency
+func (store TaskStore) MapMdToStore(file *os.File)(TaskStore,error){
 	 tasks,err:= getSavedTasks(file)
 	 if err != nil {
 		return nil, err
 	 }
-
-	 //Create a new taskstore instance
-	 store := make(TaskStore)
 
 	 for i,task := range tasks {
 		done := checkStatusInFile(task)
@@ -153,7 +152,7 @@ func getLastId(store TaskStore) int{
 //map tasks from map to md file (unordered)
 //When method is called it will map the items to markdown file and 
 func (tasks TaskStore) UpdateDoc(file *os.File)error{
-	fmt.Printf("Updating tasks in file: %s " , file.Name())
+	fmt.Printf("Updating tasks in file: %s\r\n " , file.Name())
 	//Prepare the file for the tasks
 
 	//1. Truncate the file (clear all its contents)
@@ -176,7 +175,7 @@ func (tasks TaskStore) UpdateDoc(file *os.File)error{
 	*/
 	for _, currTask := range tasks {
 		//check and format string
-		taskToWrite := currTask.prepareTask()
+		taskToWrite := currTask.PrepareTask()
 
 		//Write each task on a new line
 		if _, err := writer.WriteString(taskToWrite + "\n"); err != nil {
@@ -189,14 +188,14 @@ func (tasks TaskStore) UpdateDoc(file *os.File)error{
 		return err
 	}
 
-	fmt.Print("Markdown file successfully updated!")
+	fmt.Print("\r\nMarkdown file successfully updated!\r\n")
 	return nil
 }
 
 //Method to prepare task data to be written onto markdown
-func (task Task) prepareTask() (string){
+func (task Task) PrepareTask() (string){
 	if task.Done {
-		return "-[x] " + task.Text
+		return "- [x] " + task.Text
 	}
-	return "-[ ] " + task.Text
+	return "- [ ] " + task.Text
 }

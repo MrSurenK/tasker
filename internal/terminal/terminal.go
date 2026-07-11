@@ -96,17 +96,48 @@ func TellMeWhatToDo() (byte, bool){
 		switch key[0]{
 		case '5':
 			os.Stdout.Write([]byte("\r\nExiting...\r\n"))
-			return '5',false			
+			return '5',true			
 		case 3: // Ctrl+C
 			os.Stdout.Write([]byte("\r\nInterrupted.Closing Program!\r\n"))
 			return 3, false
 		case 4: // Ctrl+D
 			os.Stdout.Write([]byte("\r\nEOF. Exiting.\r\n"))
 			return 4, false
-		}	
-		return key[0], true
+		case '1','2','3','4':
+			return key[0], true
+		default: 
+			os.Stdout.Write([]byte ("\r\nInvalid option\r\n"))
+		}
 	}	
+}
 
+//Helper method to handle  user input in terminal raw mode 
+func ReadLine(prompt string)(string){
+	os.Stdout.Write([]byte("\r\n" + prompt))
+	var line []byte
+	for{
+		key := make([]byte, 8)
+		n, _ := os.Stdin.Read(key)
+		switch key[0]{
+		case 13: //Enter
+			if len(line) == 0 {
+				continue // ignore stray Enter at the start
+			}
+			os.Stdout.Write([]byte("\r\n"))
+			return string(line)
+		case 127: //Backspace
+			if len(line) > 0 {
+				line = line[:len(line)-1]
+				//erase the character: backspace, space, backspace beacause when we echo the character the cursor moves to the right so we need to delete the space first and then move the curor to the last character
+				os.Stdout.Write([]byte("\b \b"))
+			}
+		case 3: //Ctrl + C - abort 
+			return ""
+		default: 
+			line = append(line, key[:n]...)
+			os.Stdout.Write(key[:n]) //echo the character so user can see what they typed in terminal
+		}
+	}
 }
 
 /*
